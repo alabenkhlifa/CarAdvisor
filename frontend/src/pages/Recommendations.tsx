@@ -200,7 +200,7 @@ export default function Recommendations() {
       {/* Chat — always floating overlay, never takes grid space */}
       <ChatPanel
         currentResultIds={aiSelectedIds.length > 0 ? aiSelectedIds : vehicles.map((v) => v.id)}
-        aiSelectedCount={aiSelectedIds.length}
+        aiSelectedCars={vehicles.filter((v) => aiSelectedIds.includes(v.id))}
       />
     </div>
   );

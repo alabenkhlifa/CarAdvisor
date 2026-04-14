@@ -4,17 +4,22 @@ import { useChat } from '../../hooks/useChat';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import StreamingDots from './StreamingDots';
+import type { Vehicle } from '@shared/types';
 
 interface ChatPanelProps {
   currentResultIds?: number[];
-  aiSelectedCount?: number;
+  aiSelectedCars?: Vehicle[];
 }
 
-export default function ChatPanel({ currentResultIds, aiSelectedCount = 0 }: ChatPanelProps = {}) {
+const currencyMap: Record<string, string> = { tn: 'TND', de: 'EUR' };
+
+export default function ChatPanel({ currentResultIds, aiSelectedCars = [] }: ChatPanelProps = {}) {
   const { t } = useTranslation();
   const { messages, isStreaming, sendMessage } = useChat(currentResultIds);
   const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const hasSelection = aiSelectedCars.length > 0;
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -29,7 +34,9 @@ export default function ChatPanel({ currentResultIds, aiSelectedCount = 0 }: Cha
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-20 md:bottom-6 right-4 z-40 w-14 h-14 rounded-full bg-terracotta text-white shadow-warm-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 hover:shadow-warm-hover"
+          className={`fixed bottom-20 md:bottom-6 right-4 z-40 w-14 h-14 rounded-full bg-terracotta text-white shadow-warm-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 hover:shadow-warm-hover ${
+            hasSelection ? 'animate-bounce-gentle' : ''
+          }`}
           aria-label={t('chat.title')}
         >
           <svg
@@ -44,10 +51,13 @@ export default function ChatPanel({ currentResultIds, aiSelectedCount = 0 }: Cha
           >
             <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
           </svg>
-          {aiSelectedCount > 0 && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-sage text-white text-xs rounded-full flex items-center justify-center font-body font-bold">
-              {aiSelectedCount}
-            </span>
+          {hasSelection && (
+            <>
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-sage text-white text-xs rounded-full flex items-center justify-center font-body font-bold">
+                {aiSelectedCars.length}
+              </span>
+              <span className="absolute inset-0 rounded-full bg-terracotta animate-ping opacity-25" />
+            </>
           )}
         </button>
       )}
@@ -60,7 +70,7 @@ export default function ChatPanel({ currentResultIds, aiSelectedCount = 0 }: Cha
         />
       )}
 
-      {/* Chat window — floating card on desktop, bottom sheet on mobile */}
+      {/* Chat window */}
       <div
         className={`fixed z-50 transition-all duration-300 ease-out ${
           isOpen
@@ -88,8 +98,8 @@ export default function ChatPanel({ currentResultIds, aiSelectedCount = 0 }: Cha
               <div>
                 <h2 className="font-display text-base text-charcoal leading-tight">{t('chat.title')}</h2>
                 <p className="text-xs text-warmgray font-body">
-                  {aiSelectedCount > 0
-                    ? `${aiSelectedCount} car${aiSelectedCount > 1 ? 's' : ''} selected`
+                  {hasSelection
+                    ? `${aiSelectedCars.length} car${aiSelectedCars.length > 1 ? 's' : ''} selected`
                     : 'Powered by Groq'}
                 </p>
               </div>
@@ -105,6 +115,31 @@ export default function ChatPanel({ currentResultIds, aiSelectedCount = 0 }: Cha
               </svg>
             </button>
           </div>
+
+          {/* Selected cars strip */}
+          {hasSelection && (
+            <div className="px-4 py-2 border-b border-warmgray-border bg-peach/40 flex items-center gap-2 overflow-x-auto">
+              <svg className="w-3.5 h-3.5 text-terracotta flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              {aiSelectedCars.map((car) => {
+                const brand = (car as any).model?.brand?.name || '';
+                const model = (car as any).model?.name || '';
+                const price = Number(car.price).toLocaleString();
+                const currency = currencyMap[(car as any).market?.code] || 'TND';
+                return (
+                  <span
+                    key={car.id}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-terracotta/10 border border-terracotta/20 text-xs font-body text-charcoal whitespace-nowrap"
+                  >
+                    <span className="font-medium">{brand} {model}</span>
+                    <span className="text-terracotta font-semibold">{price} {currency}</span>
+                  </span>
+                );
+              })}
+            </div>
+          )}
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
@@ -123,10 +158,14 @@ export default function ChatPanel({ currentResultIds, aiSelectedCount = 0 }: Cha
                   </svg>
                 </div>
                 <p className="text-sm text-charcoal font-body font-medium mb-1">
-                  {t('chat.title')}
+                  {hasSelection
+                    ? `${aiSelectedCars.length} car${aiSelectedCars.length > 1 ? 's' : ''} selected`
+                    : t('chat.title')}
                 </p>
                 <p className="text-xs text-warmgray font-body">
-                  {t('chat.placeholder')}
+                  {hasSelection
+                    ? 'Ask me to compare, recommend, or explain these cars'
+                    : t('chat.placeholder')}
                 </p>
               </div>
             )}
@@ -141,6 +180,17 @@ export default function ChatPanel({ currentResultIds, aiSelectedCount = 0 }: Cha
           <ChatInput onSend={sendMessage} disabled={isStreaming} />
         </div>
       </div>
+
+      {/* Pulse animation style */}
+      <style>{`
+        @keyframes bounce-gentle {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-6px); }
+        }
+        .animate-bounce-gentle {
+          animation: bounce-gentle 1.5s ease-in-out infinite;
+        }
+      `}</style>
     </>
   );
 }
