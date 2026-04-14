@@ -13,7 +13,7 @@ export interface Vehicle {
   marketId: number;
   market?: Market;
   trimName: string | null;
-  year: number;
+  year: number | null;
   condition: VehicleCondition;
   price: number;
   mileageKm: number | null;

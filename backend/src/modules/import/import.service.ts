@@ -85,11 +85,18 @@ export class ImportService {
           where: { marketId: market.id, sourceId: row.sourceId },
         });
 
+        // Validate year: must be between 1970 and next year
+        const currentYear = new Date().getFullYear();
+        const validYear =
+          row.year && row.year >= 1970 && row.year <= currentYear + 1
+            ? row.year
+            : null;
+
         const vehicleData = {
           modelId: model.id,
           marketId: market.id,
           trimName: row.trimName,
-          year: row.year || new Date().getFullYear(),
+          year: validYear,
           condition: row.condition === 'new' ? VehicleCondition.NEW : VehicleCondition.USED,
           price: row.price,
           mileageKm: row.mileageKm,

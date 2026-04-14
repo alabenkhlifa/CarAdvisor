@@ -127,6 +127,7 @@ export class ScoringService {
   }
 
   private scoreYearNewness(vehicle: Vehicle, currentYear: number): number {
+    if (!vehicle.year) return 50; // neutral score when year unknown
     const yearsOld = currentYear - vehicle.year;
     const score = 100 - yearsOld * 5;
     return Math.max(score, 20);

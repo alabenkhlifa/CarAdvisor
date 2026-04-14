@@ -41,8 +41,8 @@ export class Vehicle {
   @Column({ type: 'varchar', nullable: true })
   trimName!: string | null;
 
-  @Column({ type: 'int' })
-  year!: number;
+  @Column({ type: 'int', nullable: true })
+  year!: number | null;
 
   @Column({ type: 'enum', enum: VehicleCondition })
   condition!: VehicleCondition;

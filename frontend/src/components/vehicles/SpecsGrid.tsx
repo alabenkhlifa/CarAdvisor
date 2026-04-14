@@ -14,7 +14,7 @@ export default function SpecsGrid({ vehicle }: SpecsGridProps) {
   const { t } = useTranslation();
 
   const specs = [
-    { label: t('vehicle.year'), value: vehicle.year },
+    { label: t('vehicle.year'), value: vehicle.year ?? '--' },
     { label: t('vehicle.mileage'), value: formatMileage(vehicle.mileageKm) },
     { label: t('vehicle.fuel'), value: vehicle.fuelType },
     { label: t('vehicle.transmission'), value: vehicle.transmission },

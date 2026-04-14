@@ -143,7 +143,7 @@ export default function VehicleCard({
 
         {/* Specs row */}
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-charcoal/70 font-body">
-          <span>{vehicle.year}</span>
+          {vehicle.year && <span>{vehicle.year}</span>}
           {formattedMileage && <span>{formattedMileage}</span>}
           <span className="capitalize">{vehicle.fuelType}</span>
           <span className="capitalize">{vehicle.transmission}</span>

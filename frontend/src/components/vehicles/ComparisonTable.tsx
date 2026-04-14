@@ -46,7 +46,7 @@ export default function ComparisonTable({
       label: t('vehicle.price'),
       getValue: (v) => formatPrice(v.price, v.market?.code ?? 'tn'),
     },
-    { label: t('vehicle.year'), getValue: (v) => String(v.year) },
+    { label: t('vehicle.year'), getValue: (v) => v.year ? String(v.year) : '--' },
     {
       label: t('vehicle.condition'),
       getValue: (v) =>
