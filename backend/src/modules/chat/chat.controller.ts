@@ -83,8 +83,15 @@ export class ChatController {
       chatHistory,
     );
 
-    // Step 2: Query DB based on extracted intent
-    const inventoryContext = await this.queryByIntent(marketCode, intent);
+    // Step 2: Build context — current screen results + intent-based query
+    const screenContext = await this.buildScreenContext(body.currentResultIds);
+    const intentContext = await this.queryByIntent(marketCode, intent);
+
+    // Combine: screen results first (higher priority), then intent results
+    const parts: string[] = [];
+    if (screenContext) parts.push(screenContext);
+    if (intentContext) parts.push(intentContext);
+    const inventoryContext = parts.join('\n\n');
 
     // Step 3: Stream response from main model
     const language = body.language || 'en';
@@ -128,6 +135,41 @@ export class ChatController {
       messages: session.messages,
       createdAt: session.createdAt,
     };
+  }
+
+  /**
+   * Build context from the cars currently visible on the user's screen.
+   */
+  private async buildScreenContext(
+    vehicleIds?: number[],
+  ): Promise<string | null> {
+    if (!vehicleIds || vehicleIds.length === 0) return null;
+
+    const vehicles = await this.vehicleRepo.find({
+      where: vehicleIds.map((id) => ({ id })),
+      relations: ['model', 'model.brand', 'market'],
+    });
+
+    if (vehicles.length === 0) return null;
+
+    const currency = vehicles[0].market?.code === 'tn' ? 'TND' : 'EUR';
+    const lines = vehicles.map((v) => {
+      const parts = [
+        `id:${v.id}`,
+        `${v.model?.brand?.name} ${v.model?.name}`,
+        v.trimName || '',
+        `${Number(v.price).toLocaleString()} ${currency}`,
+        v.condition,
+        v.fuelType,
+        v.transmission,
+        v.model?.bodyType || '',
+      ];
+      if (v.horsepower) parts.push(`${v.horsepower}hp`);
+      if (v.mileageKm) parts.push(`${v.mileageKm.toLocaleString()}km`);
+      return parts.filter(Boolean).join(' | ');
+    });
+
+    return `## Cars currently shown to the user (${vehicles.length}):\n${lines.join('\n')}`;
   }
 
   /**

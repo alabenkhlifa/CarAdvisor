@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsIn } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsIn, IsArray, IsInt } from 'class-validator';
 
 export class ChatRequestDto {
   @IsString()
@@ -17,4 +17,9 @@ export class ChatRequestDto {
   @IsOptional()
   @IsIn(['en', 'fr'])
   language?: string = 'en';
+
+  @IsArray()
+  @IsInt({ each: true })
+  @IsOptional()
+  currentResultIds?: number[];
 }

@@ -5,9 +5,13 @@ import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import StreamingDots from './StreamingDots';
 
-export default function ChatPanel() {
+interface ChatPanelProps {
+  currentResultIds?: number[];
+}
+
+export default function ChatPanel({ currentResultIds }: ChatPanelProps = {}) {
   const { t } = useTranslation();
-  const { messages, isStreaming, sendMessage } = useChat();
+  const { messages, isStreaming, sendMessage } = useChat(currentResultIds);
   const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 

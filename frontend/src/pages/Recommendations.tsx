@@ -189,7 +189,7 @@ export default function Recommendations() {
       )}
 
       {/* Chat — always floating overlay, never takes grid space */}
-      <ChatPanel />
+      <ChatPanel currentResultIds={vehicles.map((v) => v.id)} />
     </div>
   );
 }

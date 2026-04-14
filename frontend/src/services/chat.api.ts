@@ -11,6 +11,7 @@ export async function streamChat(
   sessionToken?: string | null,
   market?: string | null,
   language?: string | null,
+  currentResultIds?: number[],
 ): Promise<ReadableStreamDefaultReader<Uint8Array>> {
   const response = await fetch(`${BASE_URL}/chat`, {
     method: 'POST',
@@ -20,6 +21,7 @@ export async function streamChat(
       ...(sessionToken && { sessionToken }),
       ...(market && { market }),
       ...(language && { language }),
+      ...(currentResultIds && currentResultIds.length > 0 && { currentResultIds }),
     }),
   });
 
