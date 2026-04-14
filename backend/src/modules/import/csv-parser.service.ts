@@ -24,9 +24,11 @@ export interface NormalizedCarRow {
   sourceUrl: string | null;
 }
 
+export type CsvFormat = 'de' | 'tn_used' | 'tn_new' | 'tn_9annas';
+
 @Injectable()
 export class CsvParserService {
-  parseFile(filePath: string, format: 'de' | 'tn_used' | 'tn_new'): NormalizedCarRow[] {
+  parseFile(filePath: string, format: CsvFormat): NormalizedCarRow[] {
     if (!fs.existsSync(filePath)) {
       throw new Error(`CSV file not found: ${filePath}`);
     }
@@ -41,15 +43,17 @@ export class CsvParserService {
 
     switch (format) {
       case 'de':
-        return rows.map((r) => this.normalizeDE(r)).filter((r) => r !== null);
+        return rows.map((r) => this.normalizeDE(r)).filter((r): r is NormalizedCarRow => r !== null);
       case 'tn_used':
-        return rows.map((r) => this.normalizeTnUsed(r)).filter((r) => r !== null);
+        return rows.map((r) => this.normalizeTnUsed(r)).filter((r): r is NormalizedCarRow => r !== null);
       case 'tn_new':
-        return rows.map((r) => this.normalizeTnNew(r)).filter((r) => r !== null);
+        return rows.map((r) => this.normalizeTnNew(r)).filter((r): r is NormalizedCarRow => r !== null);
+      case 'tn_9annas':
+        return rows.map((r) => this.normalizeTn9annas(r)).filter((r): r is NormalizedCarRow => r !== null);
     }
   }
 
-  getMarketFiles(dataDir: string, marketCode: string): Array<{ path: string; format: 'de' | 'tn_used' | 'tn_new' }> {
+  getMarketFiles(dataDir: string, marketCode: string): Array<{ path: string; format: CsvFormat }> {
     if (marketCode === 'de') {
       return [{ path: path.join(dataDir, 'de_cars.csv'), format: 'de' }];
     }
@@ -57,6 +61,7 @@ export class CsvParserService {
       return [
         { path: path.join(dataDir, 'tn_used_cars.csv'), format: 'tn_used' },
         { path: path.join(dataDir, 'tn_new_cars.csv'), format: 'tn_new' },
+        { path: path.join(dataDir, '9annas_tn_used_cars.csv'), format: 'tn_9annas' },
       ];
     }
     return [];
@@ -153,13 +158,45 @@ export class CsvParserService {
     };
   }
 
+  private normalizeTn9annas(row: Record<string, string>): NormalizedCarRow | null {
+    const price = parseFloat(row.price_tnd);
+    if (!price || !row.brand || !row.id) return null;
+
+    return {
+      sourceId: `tn-9annas-${row.id}`,
+      brand: row.brand,
+      model: row.model || '',
+      trimName: null,
+      fullName: row.full_name || null,
+      year: row.year ? parseInt(row.year, 10) : null,
+      condition: 'used',
+      price,
+      mileageKm: row.mileage_km ? parseInt(row.mileage_km, 10) : null,
+      fuelType: this.normalizeFuelType(row.fuel_type),
+      transmission: this.normalizeTransmission(row.transmission),
+      engineSize: row.cylindree || null,
+      horsepower: row.cv_fiscal ? parseInt(row.cv_fiscal, 10) : null,
+      bodyType: this.normalizeBodyType(row.body_type),
+      color: row.color_exterior || null,
+      features: [],
+      imageUrl: row.thumbnail || this.firstImage(row.images) || null,
+      sourceUrl: row.url || null,
+    };
+  }
+
+  private firstImage(raw: string | undefined): string | null {
+    if (!raw) return null;
+    const first = raw.split(';')[0]?.trim();
+    return first || null;
+  }
+
   private normalizeFuelType(raw: string | undefined): string {
     if (!raw) return 'petrol';
     const lower = raw.toLowerCase().trim();
     if (lower.includes('diesel') || lower === 'gazole') return 'diesel';
-    if (lower.includes('electric') || lower === 'électrique') return 'electric';
-    if (lower.includes('hybrid') || lower === 'hybride') return 'hybrid';
-    if (lower.includes('lpg') || lower === 'gpl') return 'lpg';
+    if (lower.includes('electric') || lower.includes('électrique')) return 'electric';
+    if (lower.includes('hybrid') || lower.includes('hybride')) return 'hybrid';
+    if (lower.includes('lpg') || lower.includes('gpl')) return 'lpg';
     return 'petrol';
   }
 

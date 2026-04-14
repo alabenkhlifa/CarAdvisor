@@ -17,6 +17,10 @@ const CSV_FILES = [
     url: 'https://raw.githubusercontent.com/alabenkhlifa/automobile-tn-scrapper/refs/heads/main/automobile_tn_new_cars.csv',
     filename: 'tn_new_cars.csv',
   },
+  {
+    url: 'https://raw.githubusercontent.com/alabenkhlifa/automobile-tn-scrapper/refs/heads/main/9annas_tn_used_cars.csv',
+    filename: '9annas_tn_used_cars.csv',
+  },
 ];
 
 @Injectable()
