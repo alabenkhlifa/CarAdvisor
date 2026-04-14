@@ -17,6 +17,7 @@ export interface NormalizedCarRow {
   transmission: string;
   engineSize: string | null;
   horsepower: number | null;
+  cvFiscal: number | null;
   bodyType: string;
   color: string | null;
   features: string[];
@@ -85,6 +86,7 @@ export class CsvParserService {
       transmission: this.normalizeTransmission(row.transmission),
       engineSize: row.engine_cc ? `${row.engine_cc}cc` : null,
       horsepower: row.power_hp ? parseInt(row.power_hp, 10) : null,
+      cvFiscal: null,
       bodyType: this.normalizeBodyType(row.body_type),
       color: row.color_exterior || null,
       features: this.mergeFeatureStrings(row.features, row.safety_features, row.comfort_features),
@@ -119,6 +121,7 @@ export class CsvParserService {
       transmission: this.normalizeTransmission(row.transmission),
       engineSize: null,
       horsepower: row.cv_din ? parseInt(row.cv_din, 10) : null,
+      cvFiscal: row.cv_fiscal ? parseInt(row.cv_fiscal, 10) : null,
       bodyType: this.normalizeBodyType(row.body_type),
       color: row.color_exterior || null,
       features: this.mergeFeatureStrings(
@@ -150,6 +153,7 @@ export class CsvParserService {
       transmission: this.normalizeTransmission(row.transmission),
       engineSize: row.engine_cc ? `${row.engine_cc}cc` : null,
       horsepower: row.cv_din ? parseInt(row.cv_din, 10) : null,
+      cvFiscal: row.cv_fiscal ? parseInt(row.cv_fiscal, 10) : null,
       bodyType: this.normalizeBodyType(row.body_type),
       color: null,
       features: [],
@@ -175,7 +179,9 @@ export class CsvParserService {
       fuelType: this.normalizeFuelType(row.fuel_type),
       transmission: this.normalizeTransmission(row.transmission),
       engineSize: row.cylindree || null,
-      horsepower: row.cv_fiscal ? parseInt(row.cv_fiscal, 10) : null,
+      // 9annas.tn only provides cv_fiscal (tax HP), NOT real horsepower.
+      horsepower: null,
+      cvFiscal: row.cv_fiscal ? parseInt(row.cv_fiscal, 10) : null,
       bodyType: this.normalizeBodyType(row.body_type),
       color: row.color_exterior || null,
       features: [],

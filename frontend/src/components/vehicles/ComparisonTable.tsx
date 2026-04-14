@@ -66,6 +66,10 @@ export default function ComparisonTable({
       label: t('vehicle.horsepower'),
       getValue: (v) => (v.horsepower ? `${v.horsepower} HP` : '--'),
     },
+    {
+      label: t('vehicle.cvFiscal'),
+      getValue: (v) => (v.cvFiscal ? `${v.cvFiscal} CV` : '--'),
+    },
     { label: t('vehicle.color'), getValue: (v) => v.color ?? '--' },
   ];
 

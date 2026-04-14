@@ -110,6 +110,7 @@
     "transmission": "Transmission",
     "engine": "Engine",
     "horsepower": "Horsepower",
+    "cvFiscal": "Fiscal CV",
     "color": "Color",
     "bodyType": "Body type",
     "price": "Price",

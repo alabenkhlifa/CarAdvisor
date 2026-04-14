@@ -104,6 +104,7 @@ export class ImportService {
           transmission: row.transmission,
           engineSize: row.engineSize,
           horsepower: row.horsepower,
+          cvFiscal: row.cvFiscal,
           color: row.color,
           features: row.features.length > 0
             ? Object.fromEntries(row.features.map((f) => [f, true]))

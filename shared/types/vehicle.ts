@@ -21,6 +21,7 @@ export interface Vehicle {
   transmission: string;
   engineSize: string | null;
   horsepower: number | null;
+  cvFiscal: number | null;
   color: string | null;
   features: Record<string, boolean> | null;
   imageUrl: string | null;

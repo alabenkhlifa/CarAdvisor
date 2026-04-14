@@ -23,6 +23,10 @@ export default function SpecsGrid({ vehicle }: SpecsGridProps) {
       label: t('vehicle.horsepower'),
       value: vehicle.horsepower ? `${vehicle.horsepower} HP` : '--',
     },
+    {
+      label: t('vehicle.cvFiscal'),
+      value: vehicle.cvFiscal ? `${vehicle.cvFiscal} CV` : '--',
+    },
     { label: t('vehicle.color'), value: vehicle.color ?? '--' },
   ];
 

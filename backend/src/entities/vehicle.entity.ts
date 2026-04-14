@@ -65,6 +65,9 @@ export class Vehicle {
   @Column({ type: 'int', nullable: true })
   horsepower!: number | null;
 
+  @Column({ type: 'int', nullable: true })
+  cvFiscal!: number | null;
+
   @Column({ type: 'varchar', nullable: true })
   color!: string | null;
 
