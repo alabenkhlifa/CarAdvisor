@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecommendations } from '../hooks/useRecommendations';
@@ -26,6 +26,13 @@ export default function Recommendations() {
     page,
   );
   const { selectedIds, toggleCompare } = useCompare();
+  const [aiSelectedIds, setAiSelectedIds] = useState<number[]>([]);
+
+  const toggleAiSelect = useCallback((id: number) => {
+    setAiSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    );
+  }, []);
 
   const handleSortChange = (newSort: string) => {
     setSort(newSort);
@@ -125,7 +132,9 @@ export default function Recommendations() {
           <VehicleGrid
             vehicles={vehicles}
             compareIds={selectedIds}
+            aiSelectedIds={aiSelectedIds}
             onCompareToggle={toggleCompare}
+            onAiSelectToggle={toggleAiSelect}
           />
 
           {/* Pagination */}
@@ -189,7 +198,10 @@ export default function Recommendations() {
       )}
 
       {/* Chat — always floating overlay, never takes grid space */}
-      <ChatPanel currentResultIds={vehicles.map((v) => v.id)} />
+      <ChatPanel
+        currentResultIds={aiSelectedIds.length > 0 ? aiSelectedIds : vehicles.map((v) => v.id)}
+        aiSelectedCount={aiSelectedIds.length}
+      />
     </div>
   );
 }

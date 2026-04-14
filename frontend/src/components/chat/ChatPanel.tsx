@@ -7,9 +7,10 @@ import StreamingDots from './StreamingDots';
 
 interface ChatPanelProps {
   currentResultIds?: number[];
+  aiSelectedCount?: number;
 }
 
-export default function ChatPanel({ currentResultIds }: ChatPanelProps = {}) {
+export default function ChatPanel({ currentResultIds, aiSelectedCount = 0 }: ChatPanelProps = {}) {
   const { t } = useTranslation();
   const { messages, isStreaming, sendMessage } = useChat(currentResultIds);
   const [isOpen, setIsOpen] = useState(false);
@@ -43,9 +44,9 @@ export default function ChatPanel({ currentResultIds }: ChatPanelProps = {}) {
           >
             <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
           </svg>
-          {messages.length > 0 && (
+          {aiSelectedCount > 0 && (
             <span className="absolute -top-1 -right-1 w-5 h-5 bg-sage text-white text-xs rounded-full flex items-center justify-center font-body font-bold">
-              {messages.filter((m) => m.role === 'assistant').length}
+              {aiSelectedCount}
             </span>
           )}
         </button>
@@ -86,7 +87,11 @@ export default function ChatPanel({ currentResultIds }: ChatPanelProps = {}) {
               </div>
               <div>
                 <h2 className="font-display text-base text-charcoal leading-tight">{t('chat.title')}</h2>
-                <p className="text-xs text-warmgray font-body">Powered by Groq</p>
+                <p className="text-xs text-warmgray font-body">
+                  {aiSelectedCount > 0
+                    ? `${aiSelectedCount} car${aiSelectedCount > 1 ? 's' : ''} selected`
+                    : 'Powered by Groq'}
+                </p>
               </div>
             </div>
             <button

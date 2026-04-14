@@ -7,8 +7,10 @@ import type { Vehicle } from '@shared/types';
 interface VehicleCardProps {
   vehicle: Vehicle;
   isCompareSelected: boolean;
+  isAiSelected: boolean;
   isFavorite: boolean;
   onCompareToggle: (id: number) => void;
+  onAiSelectToggle: (id: number) => void;
   onFavoriteToggle: (id: number) => void;
 }
 
@@ -27,8 +29,10 @@ const gradients = [
 export default function VehicleCard({
   vehicle,
   isCompareSelected,
+  isAiSelected,
   isFavorite,
   onCompareToggle,
+  onAiSelectToggle,
   onFavoriteToggle,
 }: VehicleCardProps) {
   const { t } = useTranslation();
@@ -102,6 +106,22 @@ export default function VehicleCard({
               : t('vehicle.used')}
           </Badge>
         </div>
+
+        {/* AI select checkbox — top right */}
+        <button
+          onClick={(e) => { e.stopPropagation(); onAiSelectToggle(vehicle.id); }}
+          className={`absolute top-3 right-3 w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
+            isAiSelected
+              ? 'bg-terracotta text-white shadow-warm'
+              : 'bg-surface/80 text-warmgray hover:bg-surface hover:text-terracotta'
+          }`}
+          aria-label="Select for AI"
+          title="Ask AI about this car"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+          </svg>
+        </button>
       </div>
 
       {/* Content */}
