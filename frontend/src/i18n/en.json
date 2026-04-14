@@ -1,0 +1,122 @@
+{
+  "landing": {
+    "title": "CarAdvisor",
+    "tagline": "Find your perfect ride",
+    "subtitle": "Find your perfect car, wherever you are",
+    "selectMarket": "Select your market",
+    "tunisia": "Tunisia",
+    "germany": "Germany",
+    "tunisiaDesc": "New & used cars in TND",
+    "germanyDesc": "Used cars in EUR",
+    "poweredBy": "powered by AI"
+  },
+  "home": {
+    "title": "What are you looking for?",
+    "subtitle": "Tell us what you're looking for",
+    "budget": "Budget",
+    "condition": "Condition",
+    "conditionNew": "New",
+    "conditionUsed": "Used",
+    "conditionBoth": "Both",
+    "bodyType": "Body Type",
+    "fuelType": "Fuel Type",
+    "transmission": "Transmission",
+    "transmissionManual": "Manual",
+    "transmissionAutomatic": "Automatic",
+    "transmissionAny": "Any",
+    "findCars": "Find My Car"
+  },
+  "bodyTypes": {
+    "sedan": "Sedan",
+    "suv": "SUV",
+    "hatchback": "Hatchback",
+    "minivan": "Minivan",
+    "coupe": "Coupe",
+    "convertible": "Convertible",
+    "wagon": "Wagon",
+    "pickup": "Pickup"
+  },
+  "fuelTypes": {
+    "petrol": "Petrol",
+    "diesel": "Diesel",
+    "hybrid": "Hybrid",
+    "electric": "Electric"
+  },
+  "common": {
+    "language": "Language",
+    "clearData": "Clear Data",
+    "clearConfirm": "Are you sure you want to clear all your data?",
+    "favorites": "Favorites",
+    "compare": "Compare",
+    "viewDetails": "View Details",
+    "back": "Back",
+    "noResults": "No results found",
+    "loading": "Loading..."
+  },
+  "header": {
+    "appName": "CarAdvisor"
+  },
+  "footer": {
+    "clearData": "Clear all data",
+    "madeWith": "Made with"
+  },
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "favorites": "Favorites"
+  },
+  "recommendations": {
+    "title": "Recommended for you",
+    "backToPreferences": "Back to preferences",
+    "noResults": "No cars found",
+    "noResultsDesc": "Try adjusting your preferences to see more results",
+    "compareButton": "Compare",
+    "compareCount": "{{count}} selected",
+    "sortRelevance": "Sort: Relevance",
+    "sortPriceAsc": "Price: Low to High",
+    "sortPriceDesc": "Price: High to Low",
+    "sortYearDesc": "Year: Newest first",
+    "sortYearAsc": "Year: Oldest first",
+    "prev": "Previous",
+    "next": "Next"
+  },
+  "carDetail": {
+    "viewListing": "View original listing",
+    "backToResults": "Back to results",
+    "specs": "Specifications",
+    "features": "Features",
+    "similar": "Similar cars"
+  },
+  "compare": {
+    "title": "Compare vehicles",
+    "backToResults": "Back to results",
+    "remove": "Remove",
+    "vs": "Specification"
+  },
+  "chat": {
+    "title": "AI Assistant",
+    "placeholder": "Ask me anything about cars...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "notConfigured": "AI chat is not available",
+    "error": "Something went wrong. Please try again."
+  },
+  "vehicle": {
+    "new": "New",
+    "used": "Used",
+    "year": "Year",
+    "mileage": "Mileage",
+    "fuel": "Fuel",
+    "transmission": "Transmission",
+    "engine": "Engine",
+    "horsepower": "Horsepower",
+    "color": "Color",
+    "bodyType": "Body type",
+    "price": "Price",
+    "condition": "Condition",
+    "compare": "Compare",
+    "favorite": "Favorite",
+    "viewDetails": "View details",
+    "km": "km"
+  }
+}

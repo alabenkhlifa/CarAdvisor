@@ -1,0 +1,122 @@
+{
+  "landing": {
+    "title": "CarAdvisor",
+    "tagline": "Trouvez la voiture parfaite",
+    "subtitle": "Trouvez la voiture idéale, où que vous soyez",
+    "selectMarket": "Choisissez votre marché",
+    "tunisia": "Tunisie",
+    "germany": "Allemagne",
+    "tunisiaDesc": "Voitures neuves et d'occasion en TND",
+    "germanyDesc": "Voitures d'occasion en EUR",
+    "poweredBy": "propulsé par l'IA"
+  },
+  "home": {
+    "title": "Que recherchez-vous ?",
+    "subtitle": "Dites-nous ce que vous recherchez",
+    "budget": "Budget",
+    "condition": "État",
+    "conditionNew": "Neuve",
+    "conditionUsed": "Occasion",
+    "conditionBoth": "Toutes",
+    "bodyType": "Carrosserie",
+    "fuelType": "Carburant",
+    "transmission": "Transmission",
+    "transmissionManual": "Manuelle",
+    "transmissionAutomatic": "Automatique",
+    "transmissionAny": "Toutes",
+    "findCars": "Trouver ma voiture"
+  },
+  "bodyTypes": {
+    "sedan": "Berline",
+    "suv": "SUV",
+    "hatchback": "Citadine",
+    "minivan": "Monospace",
+    "coupe": "Coupé",
+    "convertible": "Cabriolet",
+    "wagon": "Break",
+    "pickup": "Pick-up"
+  },
+  "fuelTypes": {
+    "petrol": "Essence",
+    "diesel": "Diesel",
+    "hybrid": "Hybride",
+    "electric": "Électrique"
+  },
+  "common": {
+    "language": "Langue",
+    "clearData": "Effacer les données",
+    "clearConfirm": "Êtes-vous sûr de vouloir effacer toutes vos données ?",
+    "favorites": "Favoris",
+    "compare": "Comparer",
+    "viewDetails": "Voir les détails",
+    "back": "Retour",
+    "noResults": "Aucun résultat trouvé",
+    "loading": "Chargement..."
+  },
+  "header": {
+    "appName": "CarAdvisor"
+  },
+  "footer": {
+    "clearData": "Effacer toutes les données",
+    "madeWith": "Fait avec"
+  },
+  "nav": {
+    "home": "Accueil",
+    "search": "Recherche",
+    "favorites": "Favoris"
+  },
+  "recommendations": {
+    "title": "Recommandations pour vous",
+    "backToPreferences": "Retour aux preferences",
+    "noResults": "Aucune voiture trouvee",
+    "noResultsDesc": "Essayez d'ajuster vos preferences pour voir plus de resultats",
+    "compareButton": "Comparer",
+    "compareCount": "{{count}} selectionnee(s)",
+    "sortRelevance": "Tri: Pertinence",
+    "sortPriceAsc": "Prix: Croissant",
+    "sortPriceDesc": "Prix: Decroissant",
+    "sortYearDesc": "Annee: Plus recente",
+    "sortYearAsc": "Annee: Plus ancienne",
+    "prev": "Precedent",
+    "next": "Suivant"
+  },
+  "carDetail": {
+    "viewListing": "Voir l'annonce originale",
+    "backToResults": "Retour aux resultats",
+    "specs": "Caracteristiques",
+    "features": "Equipements",
+    "similar": "Voitures similaires"
+  },
+  "compare": {
+    "title": "Comparer les vehicules",
+    "backToResults": "Retour aux resultats",
+    "remove": "Retirer",
+    "vs": "Specification"
+  },
+  "chat": {
+    "title": "Assistant IA",
+    "placeholder": "Posez-moi une question sur les voitures...",
+    "send": "Envoyer",
+    "thinking": "Réflexion...",
+    "notConfigured": "Le chat IA n'est pas disponible",
+    "error": "Une erreur est survenue. Veuillez réessayer."
+  },
+  "vehicle": {
+    "new": "Neuve",
+    "used": "Occasion",
+    "year": "Annee",
+    "mileage": "Kilometrage",
+    "fuel": "Carburant",
+    "transmission": "Transmission",
+    "engine": "Moteur",
+    "horsepower": "Puissance",
+    "color": "Couleur",
+    "bodyType": "Carrosserie",
+    "price": "Prix",
+    "condition": "Etat",
+    "compare": "Comparer",
+    "favorite": "Favori",
+    "viewDetails": "Voir les details",
+    "km": "km"
+  }
+}

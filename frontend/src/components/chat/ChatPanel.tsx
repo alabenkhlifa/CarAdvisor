@@ -1,0 +1,137 @@
+import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useChat } from '../../hooks/useChat';
+import ChatMessage from './ChatMessage';
+import ChatInput from './ChatInput';
+import StreamingDots from './StreamingDots';
+
+export default function ChatPanel() {
+  const { t } = useTranslation();
+  const { messages, isStreaming, sendMessage } = useChat();
+  const [isOpen, setIsOpen] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom on new messages
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isStreaming]);
+
+  const showStreamingDots = isStreaming && (messages.length === 0 || messages[messages.length - 1]?.role === 'user');
+
+  return (
+    <>
+      {/* Floating chat button */}
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-20 md:bottom-6 right-4 z-40 w-14 h-14 rounded-full bg-terracotta text-white shadow-warm-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 hover:shadow-warm-hover"
+          aria-label={t('chat.title')}
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+          </svg>
+          {messages.length > 0 && (
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-sage text-white text-xs rounded-full flex items-center justify-center font-body font-bold">
+              {messages.filter((m) => m.role === 'assistant').length}
+            </span>
+          )}
+        </button>
+      )}
+
+      {/* Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-charcoal/20 transition-opacity"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Chat window — floating card on desktop, bottom sheet on mobile */}
+      <div
+        className={`fixed z-50 transition-all duration-300 ease-out ${
+          isOpen
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-4 pointer-events-none'
+        } bottom-0 left-0 right-0 md:bottom-6 md:right-6 md:left-auto md:top-auto`}
+      >
+        <div className="bg-cream rounded-t-2xl md:rounded-2xl shadow-warm-lg md:w-[420px] md:h-[600px] h-[75vh] flex flex-col overflow-hidden border border-warmgray-border/50">
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-warmgray-border bg-surface/80">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-terracotta/10 flex items-center justify-center">
+                <svg
+                  className="w-4 h-4 text-terracotta"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="font-display text-base text-charcoal leading-tight">{t('chat.title')}</h2>
+                <p className="text-xs text-warmgray font-body">Powered by Groq</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-2 rounded-xl text-warmgray hover:text-charcoal hover:bg-warmgray-border/50 transition-colors"
+              aria-label="Close"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6L6 18" />
+                <path d="M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
+            {messages.length === 0 && !isStreaming && (
+              <div className="flex flex-col items-center justify-center h-full text-center px-4">
+                <div className="w-16 h-16 rounded-full bg-terracotta/5 flex items-center justify-center mb-4">
+                  <svg
+                    className="w-8 h-8 text-terracotta/30"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12c0 4.97-4.03 9-9 9a9.07 9.07 0 01-4.122-.986L3 21l1.014-4.878A8.96 8.96 0 013 12c0-4.97 4.03-9 9-9s9 4.03 9 9z" />
+                  </svg>
+                </div>
+                <p className="text-sm text-charcoal font-body font-medium mb-1">
+                  {t('chat.title')}
+                </p>
+                <p className="text-xs text-warmgray font-body">
+                  {t('chat.placeholder')}
+                </p>
+              </div>
+            )}
+            {messages.map((msg, i) => (
+              <ChatMessage key={i} role={msg.role} content={msg.content} />
+            ))}
+            {showStreamingDots && <StreamingDots />}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Input */}
+          <ChatInput onSend={sendMessage} disabled={isStreaming} />
+        </div>
+      </div>
+    </>
+  );
+}
