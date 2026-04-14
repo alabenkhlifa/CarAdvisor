@@ -153,21 +153,7 @@ export class ChatController {
     if (vehicles.length === 0) return null;
 
     const currency = vehicles[0].market?.code === 'tn' ? 'TND' : 'EUR';
-    const lines = vehicles.map((v) => {
-      const parts = [
-        `id:${v.id}`,
-        `${v.model?.brand?.name} ${v.model?.name}`,
-        v.trimName || '',
-        `${Number(v.price).toLocaleString()} ${currency}`,
-        v.condition,
-        v.fuelType,
-        v.transmission,
-        v.model?.bodyType || '',
-      ];
-      if (v.horsepower) parts.push(`${v.horsepower}hp`);
-      if (v.mileageKm) parts.push(`${v.mileageKm.toLocaleString()}km`);
-      return parts.filter(Boolean).join(' | ');
-    });
+    const lines = vehicles.map((v) => this.formatVehicleLine(v, currency));
 
     return `## Cars currently shown to the user (${vehicles.length}):\n${lines.join('\n')}`;
   }
@@ -265,23 +251,34 @@ export class ChatController {
       return `No cars found matching these criteria in ${marketCode.toUpperCase()} (${totalCount} total in market). The user may be asking about cars we don't have.`;
     }
 
-    // Include vehicle ID so AI can create links
-    const lines = vehicles.map((v) => {
-      const parts = [
-        `id:${v.id}`,
-        `${v.model?.brand?.name} ${v.model?.name}`,
-        v.trimName || '',
-        `${Number(v.price).toLocaleString()} ${currency}`,
-        v.condition,
-        v.fuelType,
-        v.transmission,
-        v.model?.bodyType || '',
-      ];
-      if (v.horsepower) parts.push(`${v.horsepower}hp`);
-      if (v.mileageKm) parts.push(`${v.mileageKm.toLocaleString()}km`);
-      return parts.filter(Boolean).join(' | ');
-    });
+    const lines = vehicles.map((v) => this.formatVehicleLine(v, currency));
 
     return `## ${vehicles.length} cars found (${totalCount} total matching):\n${lines.join('\n')}`;
+  }
+
+  /**
+   * Format a single vehicle as a compact line for the AI context.
+   * Includes year and trim to help the AI disambiguate similar models.
+   */
+  private formatVehicleLine(v: Vehicle, currency: string): string {
+    const brand = v.model?.brand?.name || '';
+    const model = v.model?.name || '';
+    const trim = v.trimName || '';
+    const year = v.year || '';
+    const price = Number(v.price).toLocaleString();
+    const parts = [
+      `id:${v.id}`,
+      `${brand} ${model}`,
+      year ? `${year}` : '',
+      trim,
+      `${price} ${currency}`,
+      v.condition,
+      v.fuelType,
+      v.transmission,
+      v.model?.bodyType || '',
+    ];
+    if (v.horsepower) parts.push(`${v.horsepower}hp`);
+    if (v.mileageKm) parts.push(`${v.mileageKm.toLocaleString()}km`);
+    return parts.filter(Boolean).join(' | ');
   }
 }
