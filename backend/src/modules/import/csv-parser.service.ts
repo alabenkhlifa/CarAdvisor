@@ -156,8 +156,15 @@ export class CsvParserService {
       cvFiscal: row.cv_fiscal ? parseInt(row.cv_fiscal, 10) : null,
       bodyType: this.normalizeBodyType(row.body_type),
       color: null,
-      features: [],
-      imageUrl: row.image_url || null,
+      features: this.mergeFeatureStrings(
+        row.equipment_safety,
+        row.equipment_driving_aids,
+        row.equipment_exterior,
+        row.equipment_audio,
+        row.equipment_interior,
+        row.equipment_functional,
+      ),
+      imageUrl: row.thumbnail || row.image_url || null,
       sourceUrl: row.url || null,
     };
   }
@@ -186,8 +193,25 @@ export class CsvParserService {
       color: row.color_exterior || null,
       features: [],
       imageUrl: row.thumbnail || this.firstImage(row.images) || null,
-      sourceUrl: row.url || null,
+      sourceUrl: this.build9annasUrl(row),
     };
+  }
+
+  private build9annasUrl(row: Record<string, string>): string | null {
+    if (!row.id) return row.url || null;
+    const locationSlug = this.slugify(row.governorate || row.location || '') || 'tunisie';
+    const titleSlug =
+      this.slugify(row.full_name || `${row.brand || ''} ${row.model || ''}`) || 'annonce';
+    return `https://9annas.tn/details/${locationSlug}/auto-moto-1/${titleSlug}-${row.id}`;
+  }
+
+  private slugify(value: string): string {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   }
 
   private firstImage(raw: string | undefined): string | null {

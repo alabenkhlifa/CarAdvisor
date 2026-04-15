@@ -39,6 +39,16 @@ export class RecommendDto {
   brandName?: string;
 
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  brandId?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  modelId?: number;
+
+  @IsOptional()
   @IsEnum(VehicleSortOption)
   sort?: VehicleSortOption;
 

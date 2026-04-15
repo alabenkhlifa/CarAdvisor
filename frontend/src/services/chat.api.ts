@@ -12,6 +12,7 @@ export async function streamChat(
   market?: string | null,
   language?: string | null,
   currentResultIds?: number[],
+  selectedVehicleIds?: number[],
 ): Promise<ReadableStreamDefaultReader<Uint8Array>> {
   const response = await fetch(`${BASE_URL}/chat`, {
     method: 'POST',
@@ -22,6 +23,7 @@ export async function streamChat(
       ...(market && { market }),
       ...(language && { language }),
       ...(currentResultIds && currentResultIds.length > 0 && { currentResultIds }),
+      ...(selectedVehicleIds && selectedVehicleIds.length > 0 && { selectedVehicleIds }),
     }),
   });
 

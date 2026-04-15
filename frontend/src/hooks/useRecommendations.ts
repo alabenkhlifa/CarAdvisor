@@ -4,7 +4,12 @@ import { usePreferences } from '../store/usePreferences';
 import { useMarket } from '../store/useMarket';
 import type { Vehicle } from '@shared/types';
 
-export function useRecommendations(sort?: string, page: number = 1) {
+export function useRecommendations(
+  sort?: string,
+  page: number = 1,
+  brandId?: number,
+  modelId?: number,
+) {
   const { preferences } = usePreferences();
   const { market } = useMarket();
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -47,6 +52,8 @@ export function useRecommendations(sort?: string, page: number = 1) {
           bodyType: prefs.bodyType ?? undefined,
           fuelType: prefs.fuelType ?? undefined,
           transmission: prefs.transmission ?? undefined,
+          brandId,
+          modelId,
           sort: sort || undefined,
           page,
           limit: 9,
@@ -72,7 +79,7 @@ export function useRecommendations(sort?: string, page: number = 1) {
     return () => {
       cancelled = true;
     };
-  }, [market, prefsKey, sort, page]);
+  }, [market, prefsKey, sort, page, brandId, modelId]);
 
   return { vehicles, loading, error, total, totalPages };
 }

@@ -77,6 +77,8 @@
     "sortPriceDesc": "Price: High to Low",
     "sortYearDesc": "Year: Newest first",
     "sortYearAsc": "Year: Oldest first",
+    "allBrands": "All brands",
+    "allModels": "All models",
     "prev": "Previous",
     "next": "Next"
   },

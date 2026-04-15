@@ -1,12 +1,16 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecommendations } from '../hooks/useRecommendations';
 import { useCompare } from '../hooks/useCompare';
+import { useMarket } from '../store/useMarket';
 import VehicleGrid from '../components/vehicles/VehicleGrid';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import Button from '../components/ui/Button';
 import ChatPanel from '../components/chat/ChatPanel';
+import { getBrands, getModels } from '../services/brands.api';
+import { usePreferences } from '../store/usePreferences';
+import type { Brand, Model } from '@shared/types';
 
 const sortOptions = [
   { value: '', labelKey: 'recommendations.sortRelevance' },
@@ -21,9 +25,18 @@ export default function Recommendations() {
   const navigate = useNavigate();
   const [sort, setSort] = useState('');
   const [page, setPage] = useState(1);
+  const [brandId, setBrandId] = useState<number | undefined>();
+  const [modelId, setModelId] = useState<number | undefined>();
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [models, setModels] = useState<Model[]>([]);
+  const { market } = useMarket();
+  const { preferences } = usePreferences();
+  const prefsKey = JSON.stringify(preferences);
   const { vehicles, loading, error, total, totalPages } = useRecommendations(
     sort || undefined,
     page,
+    brandId,
+    modelId,
   );
   const { selectedIds, toggleCompare } = useCompare();
   const [aiSelectedIds, setAiSelectedIds] = useState<number[]>([]);
@@ -36,6 +49,55 @@ export default function Recommendations() {
 
   const handleSortChange = (newSort: string) => {
     setSort(newSort);
+    setPage(1);
+  };
+
+  useEffect(() => {
+    if (!market) return;
+    let cancelled = false;
+    const prefs = JSON.parse(prefsKey);
+    getBrands(market, {
+      condition: prefs.condition === 'both' ? undefined : (prefs.condition ?? undefined),
+      minPrice: prefs.budgetMin ?? undefined,
+      maxPrice: prefs.budgetMax ?? undefined,
+      bodyType: prefs.bodyType ?? undefined,
+      fuelType: prefs.fuelType ?? undefined,
+      transmission: prefs.transmission ?? undefined,
+    }).then((data) => {
+      if (!cancelled) setBrands(data);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [market, prefsKey]);
+
+  useEffect(() => {
+    setModelId(undefined);
+    if (!brandId || !market) {
+      setModels([]);
+      return;
+    }
+    let cancelled = false;
+    const prefs = JSON.parse(prefsKey);
+    getModels(brandId, {
+      market,
+      condition: prefs.condition === 'both' ? undefined : (prefs.condition ?? undefined),
+      minPrice: prefs.budgetMin ?? undefined,
+      maxPrice: prefs.budgetMax ?? undefined,
+      bodyType: prefs.bodyType ?? undefined,
+      fuelType: prefs.fuelType ?? undefined,
+      transmission: prefs.transmission ?? undefined,
+    }).then((data) => {
+      if (!cancelled) setModels(data);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [brandId, market, prefsKey]);
+
+  const handleBrandChange = (value: string) => {
+    setBrandId(value ? Number(value) : undefined);
+    setPage(1);
+  };
+
+  const handleModelChange = (value: string) => {
+    setModelId(value ? Number(value) : undefined);
     setPage(1);
   };
 
@@ -84,8 +146,8 @@ export default function Recommendations() {
         </div>
       </div>
 
-      {/* Sort controls */}
-      <div className="flex items-center gap-3">
+      {/* Sort + filter controls */}
+      <div className="flex items-center gap-3 overflow-x-auto">
         <select
           value={sort}
           onChange={(e) => handleSortChange(e.target.value)}
@@ -95,6 +157,29 @@ export default function Recommendations() {
             <option key={opt.value} value={opt.value}>
               {t(opt.labelKey)}
             </option>
+          ))}
+        </select>
+
+        <select
+          value={brandId ?? ''}
+          onChange={(e) => handleBrandChange(e.target.value)}
+          className="w-44 max-w-[11rem] text-sm font-body bg-surface border border-warmgray-border rounded-xl px-4 py-2 text-charcoal cursor-pointer focus:outline-none focus:border-terracotta transition-colors truncate"
+        >
+          <option value="">{t('recommendations.allBrands')}</option>
+          {brands.map((b) => (
+            <option key={b.id} value={b.id}>{b.name.length > 30 ? b.name.slice(0, 30) + '…' : b.name}</option>
+          ))}
+        </select>
+
+        <select
+          value={modelId ?? ''}
+          onChange={(e) => handleModelChange(e.target.value)}
+          disabled={!brandId || models.length === 0}
+          className="w-44 max-w-[11rem] text-sm font-body bg-surface border border-warmgray-border rounded-xl px-4 py-2 text-charcoal cursor-pointer focus:outline-none focus:border-terracotta transition-colors disabled:opacity-50 disabled:cursor-not-allowed truncate"
+        >
+          <option value="">{t('recommendations.allModels')}</option>
+          {models.map((m) => (
+            <option key={m.id} value={m.id}>{m.name.length > 30 ? m.name.slice(0, 30) + '…' : m.name}</option>
           ))}
         </select>
       </div>
@@ -199,7 +284,7 @@ export default function Recommendations() {
 
       {/* Chat — always floating overlay, never takes grid space */}
       <ChatPanel
-        currentResultIds={aiSelectedIds.length > 0 ? aiSelectedIds : vehicles.map((v) => v.id)}
+        currentResultIds={vehicles.map((v) => v.id)}
         aiSelectedCars={vehicles.filter((v) => aiSelectedIds.includes(v.id))}
       />
     </div>

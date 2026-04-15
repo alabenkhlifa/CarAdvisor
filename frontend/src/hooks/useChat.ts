@@ -4,7 +4,7 @@ import { useSession } from '../store/useSession';
 import { useMarket } from '../store/useMarket';
 import { useLanguage } from '../store/useLanguage';
 
-export function useChat(currentResultIds?: number[]) {
+export function useChat(currentResultIds?: number[], selectedVehicleIds?: number[]) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const { sessionToken, setSessionToken } = useSession();
@@ -13,6 +13,8 @@ export function useChat(currentResultIds?: number[]) {
   const abortRef = useRef(false);
   const resultIdsRef = useRef(currentResultIds);
   resultIdsRef.current = currentResultIds;
+  const selectedIdsRef = useRef(selectedVehicleIds);
+  selectedIdsRef.current = selectedVehicleIds;
 
   const loadHistory = useCallback(async () => {
     if (!sessionToken) return;
@@ -40,7 +42,7 @@ export function useChat(currentResultIds?: number[]) {
       abortRef.current = false;
 
       try {
-        const reader = await streamChat(text.trim(), sessionToken, market, language, resultIdsRef.current);
+        const reader = await streamChat(text.trim(), sessionToken, market, language, resultIdsRef.current, selectedIdsRef.current);
         const decoder = new TextDecoder();
         let assistantContent = '';
         let hasStarted = false;

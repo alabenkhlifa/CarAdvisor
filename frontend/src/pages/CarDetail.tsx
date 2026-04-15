@@ -6,6 +6,7 @@ import SpecsGrid from '../components/vehicles/SpecsGrid';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { groupFeatures } from '../lib/featureCategory';
 
 const gradients = [
   'from-terracotta/20 to-peach/30',
@@ -77,13 +78,13 @@ export default function CarDetail() {
 
       {/* Hero image */}
       <div
-        className={`relative w-full h-64 sm:h-96 rounded-2xl bg-gradient-to-br ${gradient} overflow-hidden`}
+        className={`relative w-full aspect-[16/10] rounded-2xl overflow-hidden ${vehicle.imageUrl ? 'bg-surface' : `bg-gradient-to-br ${gradient}`}`}
       >
         {vehicle.imageUrl ? (
           <img
             src={vehicle.imageUrl}
             alt={`${brandName} ${modelName}`}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-contain"
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = 'none';
             }}
@@ -133,15 +134,32 @@ export default function CarDetail() {
 
       {/* Features */}
       {featureKeys.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-5">
           <h2 className="font-display text-xl text-charcoal">
             {t('carDetail.features')}
           </h2>
-          <div className="flex flex-wrap gap-2">
-            {featureKeys.map((feature) => (
-              <Badge key={feature}>
-                {feature.replace(/_/g, ' ')}
-              </Badge>
+          <div className="space-y-4">
+            {groupFeatures(featureKeys).map(({ category, items }) => (
+              <div key={category.key} className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${category.dot}`} />
+                  <h3 className="text-sm font-body font-semibold text-charcoal/80 uppercase tracking-wide">
+                    {category.label}
+                  </h3>
+                  <span className="text-xs text-warmgray font-body">({items.length})</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {items.map((feature) => (
+                    <span
+                      key={feature}
+                      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium font-body ${category.chip}`}
+                    >
+                      {category.icon}
+                      {feature.replace(/_/g, ' ')}
+                    </span>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>

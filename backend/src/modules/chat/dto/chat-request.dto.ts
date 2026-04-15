@@ -22,4 +22,9 @@ export class ChatRequestDto {
   @IsInt({ each: true })
   @IsOptional()
   currentResultIds?: number[];
+
+  @IsArray()
+  @IsInt({ each: true })
+  @IsOptional()
+  selectedVehicleIds?: number[];
 }

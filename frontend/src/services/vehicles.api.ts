@@ -39,6 +39,8 @@ export interface RecommendRequest {
   bodyType?: string;
   fuelType?: string;
   transmission?: string;
+  brandId?: number;
+  modelId?: number;
   sort?: string;
   page?: number;
   limit?: number;

@@ -45,6 +45,8 @@ export class VehiclesController {
       bodyType: body.bodyType,
       fuelType: body.fuelType,
       transmission: body.transmission,
+      brandId: body.brandId,
+      modelId: body.modelId,
       sort: body.sort,
       page: 1,
       limit: 500,

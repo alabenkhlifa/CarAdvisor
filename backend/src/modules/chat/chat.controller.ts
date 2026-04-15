@@ -69,26 +69,45 @@ export class ChatController {
       if (market) marketCode = market.code;
     }
 
-    // Save user message
-    await this.chatService.addMessage(session, 'user', body.message);
+    const hasExplicitSelection =
+      !!body.selectedVehicleIds && body.selectedVehicleIds.length > 0;
 
-    // Step 1: Extract intent using fast model
+    // Annotate the stored message so historical turns keep their own selection.
+    const taggedMessage = hasExplicitSelection
+      ? `[Selected cars for this turn: ${body.selectedVehicleIds!.join(', ')}]\n${body.message}`
+      : body.message;
+    await this.chatService.addMessage(session, 'user', taggedMessage);
+
+    // Step 1: Extract intent using fast model.
+    // When the user has an explicit selection this turn, skip prior history —
+    // otherwise filters from earlier turns (deselected cars) leak forward.
     const chatHistory = (session.messages || []).map((m) => ({
       role: m.role,
       content: m.content,
     }));
+    const intentHistory = hasExplicitSelection ? [] : chatHistory;
 
     const intent = await this.groqService.extractIntent(
       body.message,
-      chatHistory,
+      intentHistory,
     );
 
-    // Step 2: Build context — current screen results + intent-based query
-    const screenContext = await this.buildScreenContext(body.currentResultIds);
-    const intentContext = await this.queryByIntent(marketCode, intent);
+    // Step 2: Build context — selection (if any), screen results, intent query
+    const selectionContext = hasExplicitSelection
+      ? await this.buildScreenContext(
+          body.selectedVehicleIds,
+          'USER EXPLICITLY SELECTED THESE CARS — discuss ONLY these, ignore cars from earlier turns',
+        )
+      : null;
+    const screenContext = hasExplicitSelection
+      ? null
+      : await this.buildScreenContext(body.currentResultIds);
+    const intentContext = hasExplicitSelection
+      ? ''
+      : await this.queryByIntent(marketCode, intent);
 
-    // Combine: screen results first (higher priority), then intent results
     const parts: string[] = [];
+    if (selectionContext) parts.push(selectionContext);
     if (screenContext) parts.push(screenContext);
     if (intentContext) parts.push(intentContext);
     const inventoryContext = parts.join('\n\n');
@@ -142,6 +161,7 @@ export class ChatController {
    */
   private async buildScreenContext(
     vehicleIds?: number[],
+    heading?: string,
   ): Promise<string | null> {
     if (!vehicleIds || vehicleIds.length === 0) return null;
 
@@ -154,8 +174,9 @@ export class ChatController {
 
     const currency = vehicles[0].market?.code === 'tn' ? 'TND' : 'EUR';
     const lines = vehicles.map((v) => this.formatVehicleLine(v, currency));
+    const title = heading ?? `Cars currently shown to the user (${vehicles.length})`;
 
-    return `## Cars currently shown to the user (${vehicles.length}):\n${lines.join('\n')}`;
+    return `## ${title}:\n${lines.join('\n')}`;
   }
 
   /**
@@ -279,6 +300,14 @@ export class ChatController {
     ];
     if (v.horsepower) parts.push(`${v.horsepower}hp`);
     if (v.mileageKm) parts.push(`${v.mileageKm.toLocaleString()}km`);
+    if (v.features) {
+      const featureNames = Object.keys(v.features).filter(
+        (k) => (v.features as Record<string, unknown>)[k],
+      );
+      if (featureNames.length > 0) {
+        parts.push(`options: ${featureNames.join(', ')}`);
+      }
+    }
     return parts.filter(Boolean).join(' | ');
   }
 }

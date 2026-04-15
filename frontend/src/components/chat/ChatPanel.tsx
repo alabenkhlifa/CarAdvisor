@@ -15,7 +15,8 @@ const currencyMap: Record<string, string> = { tn: 'TND', de: 'EUR' };
 
 export default function ChatPanel({ currentResultIds, aiSelectedCars = [] }: ChatPanelProps = {}) {
   const { t } = useTranslation();
-  const { messages, isStreaming, sendMessage } = useChat(currentResultIds);
+  const selectedIds = aiSelectedCars.map((c) => c.id);
+  const { messages, isStreaming, sendMessage } = useChat(currentResultIds, selectedIds);
   const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
