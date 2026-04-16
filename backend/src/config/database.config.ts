@@ -20,5 +20,10 @@ export function getDatabaseConfig(
     entities: [Brand, Model, Market, Vehicle, ChatSession, ImportLog],
     autoLoadEntities: true,
     synchronize: configService.get<string>('NODE_ENV') !== 'production',
+    extra: {
+      max: configService.get<number>('DB_POOL_MAX', 10),
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 5000,
+    },
   };
 }

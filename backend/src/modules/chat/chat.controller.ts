@@ -9,6 +9,7 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { Response } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -20,6 +21,7 @@ import { Market } from '../../entities/market.entity';
 import { Vehicle } from '../../entities/vehicle.entity';
 
 @Controller('api/chat')
+@Throttle({ chat: { limit: 10, ttl: 60_000 } })
 export class ChatController {
   constructor(
     private readonly chatService: ChatService,

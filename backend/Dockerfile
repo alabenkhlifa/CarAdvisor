@@ -31,10 +31,11 @@ RUN npm run build
 FROM node:20-alpine AS production
 WORKDIR /app
 
-COPY --from=build /app/shared ./shared
-COPY --from=build /app/backend/dist ./backend/dist
-COPY --from=build /app/backend/node_modules ./backend/node_modules
-COPY --from=build /app/backend/package.json ./backend/package.json
+COPY --from=build --chown=node:node /app/shared ./shared
+COPY --from=build --chown=node:node /app/backend/dist ./backend/dist
+COPY --from=build --chown=node:node /app/backend/node_modules ./backend/node_modules
+COPY --from=build --chown=node:node /app/backend/package.json ./backend/package.json
 
 WORKDIR /app/backend
+USER node
 CMD ["node", "dist/main.js"]

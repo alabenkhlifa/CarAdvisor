@@ -43,9 +43,8 @@ jobs:
         working-directory: backend
 
       - name: Test
-        run: npm test
+        run: npm test --if-present
         working-directory: backend
-        continue-on-error: true
         env:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
