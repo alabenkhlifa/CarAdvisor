@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useMarket } from '../store/useMarket';
-import { useLanguage } from '../store/useLanguage';
+import { useLanguage, type Language } from '../store/useLanguage';
 
 const markets = [
   {
@@ -101,7 +101,7 @@ export default function Landing() {
         <select
           value={language}
           onChange={(e) => {
-            const next = e.target.value as 'en' | 'fr';
+            const next = e.target.value as Language;
             setLanguage(next);
             i18n.changeLanguage(next);
           }}
@@ -110,6 +110,7 @@ export default function Landing() {
         >
           <option value="en">🇬🇧 English</option>
           <option value="fr">🇫🇷 Français</option>
+          <option value="de">🇩🇪 Deutsch</option>
         </select>
         <p className="text-xs text-warmgray/60 font-body">
           {t('landing.poweredBy')}
