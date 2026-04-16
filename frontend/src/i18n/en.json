@@ -58,7 +58,10 @@
   },
   "footer": {
     "clearData": "Clear all data",
-    "madeWith": "Made with"
+    "madeWith": "Made with",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "imprint": "Imprint"
   },
   "nav": {
     "home": "Home",
@@ -121,5 +124,41 @@
     "favorite": "Favorite",
     "viewDetails": "View details",
     "km": "km"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "lead": "How CarAdvisor handles your data.",
+      "dataCollectedTitle": "Data we collect",
+      "dataCollectedBody": "CarAdvisor stores your preferences, session token, and favourites in your browser's localStorage. Chat messages are sent to Groq for AI processing. No personal identifiers are collected or required.",
+      "thirdPartiesTitle": "Third parties",
+      "thirdPartiesBody": "Chat messages are processed by Groq (United States). Vehicle listings originate from public sources (automobile.tn, AutoScout24).",
+      "retentionTitle": "Retention",
+      "retentionBody": "Data stored in localStorage is retained until you clear it via the footer link or your browser settings. Chat sessions expire after 30 days.",
+      "rightsTitle": "Your rights (GDPR)",
+      "rightsBody": "If you are an EU resident you may request access, correction, or deletion of any data we hold. Contact us via the Imprint page.",
+      "lastUpdated": "Last updated: {{date}}"
+    },
+    "imprint": {
+      "title": "Imprint",
+      "lead": "Legally required information (§5 TMG).",
+      "operatorTitle": "Operator",
+      "operatorBody": "CarAdvisor\n[Owner name]\n[Street address]\n[Postal code, city]\n[Country]",
+      "contactTitle": "Contact",
+      "contactBody": "Email: [contact@example.com]",
+      "liabilityTitle": "Liability for content",
+      "liabilityBody": "We strive to keep information accurate but make no warranty for completeness or availability of vehicle listings sourced from third parties."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "lead": "Using CarAdvisor.",
+      "useTitle": "Acceptable use",
+      "useBody": "CarAdvisor is a free, anonymous vehicle-search tool. You agree not to abuse the service or attempt to extract data at scale.",
+      "accuracyTitle": "Accuracy of listings",
+      "accuracyBody": "Vehicle data is aggregated from public sources and may be outdated. Always verify details with the original seller before taking any action.",
+      "liabilityTitle": "Limitation of liability",
+      "liabilityBody": "CarAdvisor is provided 'as is' without warranty. We are not a party to any transaction between you and a seller.",
+      "lastUpdated": "Last updated: {{date}}"
+    }
   }
 }

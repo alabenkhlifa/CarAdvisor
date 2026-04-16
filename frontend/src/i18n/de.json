@@ -1,0 +1,164 @@
+{
+  "landing": {
+    "title": "CarAdvisor",
+    "tagline": "Finde dein perfektes Auto",
+    "subtitle": "Finde das perfekte Auto, egal wo du bist",
+    "selectMarket": "Wähle deinen Markt",
+    "tunisia": "Tunesien",
+    "germany": "Deutschland",
+    "tunisiaDesc": "Neu- und Gebrauchtwagen in TND",
+    "germanyDesc": "Gebrauchtwagen in EUR",
+    "poweredBy": "mit KI"
+  },
+  "home": {
+    "title": "Wonach suchst du?",
+    "subtitle": "Sag uns, was du suchst",
+    "budget": "Budget",
+    "condition": "Zustand",
+    "conditionNew": "Neu",
+    "conditionUsed": "Gebraucht",
+    "conditionBoth": "Beide",
+    "bodyType": "Karosserie",
+    "fuelType": "Kraftstoff",
+    "transmission": "Getriebe",
+    "transmissionManual": "Schaltgetriebe",
+    "transmissionAutomatic": "Automatik",
+    "transmissionAny": "Alle",
+    "findCars": "Auto finden"
+  },
+  "bodyTypes": {
+    "sedan": "Limousine",
+    "suv": "SUV",
+    "hatchback": "Kleinwagen",
+    "minivan": "Van",
+    "coupe": "Coupé",
+    "convertible": "Cabrio",
+    "wagon": "Kombi",
+    "pickup": "Pick-up"
+  },
+  "fuelTypes": {
+    "petrol": "Benzin",
+    "diesel": "Diesel",
+    "hybrid": "Hybrid",
+    "electric": "Elektro"
+  },
+  "common": {
+    "language": "Sprache",
+    "clearData": "Daten löschen",
+    "clearConfirm": "Möchtest du wirklich alle Daten löschen?",
+    "favorites": "Favoriten",
+    "compare": "Vergleichen",
+    "viewDetails": "Details ansehen",
+    "back": "Zurück",
+    "noResults": "Keine Ergebnisse",
+    "loading": "Lädt..."
+  },
+  "header": {
+    "appName": "CarAdvisor"
+  },
+  "footer": {
+    "clearData": "Alle Daten löschen",
+    "madeWith": "Erstellt mit",
+    "privacy": "Datenschutz",
+    "terms": "AGB",
+    "imprint": "Impressum"
+  },
+  "nav": {
+    "home": "Start",
+    "search": "Suche",
+    "favorites": "Favoriten"
+  },
+  "recommendations": {
+    "title": "Empfehlungen für dich",
+    "backToPreferences": "Zurück zu den Präferenzen",
+    "noResults": "Keine Autos gefunden",
+    "noResultsDesc": "Passe deine Präferenzen an, um mehr Ergebnisse zu sehen",
+    "compareButton": "Vergleichen",
+    "compareCount": "{{count}} ausgewählt",
+    "sortRelevance": "Sortierung: Relevanz",
+    "sortPriceAsc": "Preis: aufsteigend",
+    "sortPriceDesc": "Preis: absteigend",
+    "sortYearDesc": "Baujahr: neueste zuerst",
+    "sortYearAsc": "Baujahr: älteste zuerst",
+    "allBrands": "Alle Marken",
+    "allModels": "Alle Modelle",
+    "prev": "Zurück",
+    "next": "Weiter"
+  },
+  "carDetail": {
+    "viewListing": "Originalanzeige ansehen",
+    "backToResults": "Zurück zu den Ergebnissen",
+    "specs": "Technische Daten",
+    "features": "Ausstattung",
+    "similar": "Ähnliche Autos"
+  },
+  "compare": {
+    "title": "Fahrzeuge vergleichen",
+    "backToResults": "Zurück zu den Ergebnissen",
+    "remove": "Entfernen",
+    "vs": "Merkmal"
+  },
+  "chat": {
+    "title": "KI-Assistent",
+    "placeholder": "Frag mich alles über Autos...",
+    "send": "Senden",
+    "thinking": "Denke nach...",
+    "notConfigured": "KI-Chat ist nicht verfügbar",
+    "error": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  },
+  "vehicle": {
+    "new": "Neu",
+    "used": "Gebraucht",
+    "year": "Baujahr",
+    "mileage": "Laufleistung",
+    "fuel": "Kraftstoff",
+    "transmission": "Getriebe",
+    "engine": "Motor",
+    "horsepower": "Leistung",
+    "cvFiscal": "Steuer-PS",
+    "color": "Farbe",
+    "bodyType": "Karosserie",
+    "price": "Preis",
+    "condition": "Zustand",
+    "compare": "Vergleichen",
+    "favorite": "Favorit",
+    "viewDetails": "Details ansehen",
+    "km": "km"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Datenschutzerklärung",
+      "lead": "Wie CarAdvisor mit deinen Daten umgeht.",
+      "dataCollectedTitle": "Erhobene Daten",
+      "dataCollectedBody": "CarAdvisor speichert deine Präferenzen, ein Session-Token und Favoriten im localStorage deines Browsers. Chat-Nachrichten werden zur KI-Verarbeitung an Groq gesendet. Es werden keine persönlichen Identifikatoren erhoben.",
+      "thirdPartiesTitle": "Dritte",
+      "thirdPartiesBody": "Chat-Nachrichten werden von Groq (USA) verarbeitet. Fahrzeuganzeigen stammen aus öffentlichen Quellen (automobile.tn, AutoScout24).",
+      "retentionTitle": "Speicherdauer",
+      "retentionBody": "Im localStorage gespeicherte Daten bleiben erhalten, bis du sie über den Fußzeilenlink oder deine Browsereinstellungen löschst. Chat-Sitzungen laufen nach 30 Tagen ab.",
+      "rightsTitle": "Deine Rechte (DSGVO)",
+      "rightsBody": "Als EU-Bürger kannst du Auskunft, Berichtigung oder Löschung deiner Daten verlangen. Kontaktiere uns über das Impressum.",
+      "lastUpdated": "Letzte Aktualisierung: {{date}}"
+    },
+    "imprint": {
+      "title": "Impressum",
+      "lead": "Gesetzlich erforderliche Angaben (§5 TMG).",
+      "operatorTitle": "Betreiber",
+      "operatorBody": "CarAdvisor\n[Name des Inhabers]\n[Straße]\n[PLZ, Ort]\n[Land]",
+      "contactTitle": "Kontakt",
+      "contactBody": "E-Mail: [contact@example.com]",
+      "liabilityTitle": "Haftung für Inhalte",
+      "liabilityBody": "Wir bemühen uns um aktuelle und korrekte Informationen, übernehmen aber keine Gewähr für die Vollständigkeit oder Verfügbarkeit von Anzeigen aus Drittquellen."
+    },
+    "terms": {
+      "title": "Nutzungsbedingungen",
+      "lead": "Nutzung von CarAdvisor.",
+      "useTitle": "Zulässige Nutzung",
+      "useBody": "CarAdvisor ist ein kostenloses, anonymes Tool zur Fahrzeugsuche. Du verpflichtest dich, den Dienst nicht zu missbrauchen oder Daten in großem Umfang zu extrahieren.",
+      "accuracyTitle": "Richtigkeit der Anzeigen",
+      "accuracyBody": "Fahrzeugdaten werden aus öffentlichen Quellen zusammengeführt und können veraltet sein. Überprüfe Details stets direkt beim Verkäufer.",
+      "liabilityTitle": "Haftungsbeschränkung",
+      "liabilityBody": "CarAdvisor wird „wie besehen\" ohne Gewähr bereitgestellt. Wir sind nicht Partei von Transaktionen zwischen dir und einem Verkäufer.",
+      "lastUpdated": "Letzte Aktualisierung: {{date}}"
+    }
+  }
+}

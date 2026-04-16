@@ -58,7 +58,10 @@
   },
   "footer": {
     "clearData": "Effacer toutes les données",
-    "madeWith": "Fait avec"
+    "madeWith": "Fait avec",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "imprint": "Mentions légales"
   },
   "nav": {
     "home": "Accueil",
@@ -67,33 +70,33 @@
   },
   "recommendations": {
     "title": "Recommandations pour vous",
-    "backToPreferences": "Retour aux preferences",
-    "noResults": "Aucune voiture trouvee",
-    "noResultsDesc": "Essayez d'ajuster vos preferences pour voir plus de resultats",
+    "backToPreferences": "Retour aux préférences",
+    "noResults": "Aucune voiture trouvée",
+    "noResultsDesc": "Essayez d'ajuster vos préférences pour voir plus de résultats",
     "compareButton": "Comparer",
-    "compareCount": "{{count}} selectionnee(s)",
-    "sortRelevance": "Tri: Pertinence",
-    "sortPriceAsc": "Prix: Croissant",
-    "sortPriceDesc": "Prix: Decroissant",
-    "sortYearDesc": "Annee: Plus recente",
-    "sortYearAsc": "Annee: Plus ancienne",
+    "compareCount": "{{count}} sélectionnée(s)",
+    "sortRelevance": "Tri : Pertinence",
+    "sortPriceAsc": "Prix : Croissant",
+    "sortPriceDesc": "Prix : Décroissant",
+    "sortYearDesc": "Année : Plus récente",
+    "sortYearAsc": "Année : Plus ancienne",
     "allBrands": "Toutes les marques",
-    "allModels": "Tous les modeles",
-    "prev": "Precedent",
+    "allModels": "Tous les modèles",
+    "prev": "Précédent",
     "next": "Suivant"
   },
   "carDetail": {
     "viewListing": "Voir l'annonce originale",
-    "backToResults": "Retour aux resultats",
-    "specs": "Caracteristiques",
-    "features": "Equipements",
+    "backToResults": "Retour aux résultats",
+    "specs": "Caractéristiques",
+    "features": "Équipements",
     "similar": "Voitures similaires"
   },
   "compare": {
-    "title": "Comparer les vehicules",
-    "backToResults": "Retour aux resultats",
+    "title": "Comparer les véhicules",
+    "backToResults": "Retour aux résultats",
     "remove": "Retirer",
-    "vs": "Specification"
+    "vs": "Spécification"
   },
   "chat": {
     "title": "Assistant IA",
@@ -106,8 +109,8 @@
   "vehicle": {
     "new": "Neuve",
     "used": "Occasion",
-    "year": "Annee",
-    "mileage": "Kilometrage",
+    "year": "Année",
+    "mileage": "Kilométrage",
     "fuel": "Carburant",
     "transmission": "Transmission",
     "engine": "Moteur",
@@ -116,10 +119,46 @@
     "color": "Couleur",
     "bodyType": "Carrosserie",
     "price": "Prix",
-    "condition": "Etat",
+    "condition": "État",
     "compare": "Comparer",
     "favorite": "Favori",
-    "viewDetails": "Voir les details",
+    "viewDetails": "Voir les détails",
     "km": "km"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "lead": "Comment CarAdvisor traite vos données.",
+      "dataCollectedTitle": "Données collectées",
+      "dataCollectedBody": "CarAdvisor enregistre vos préférences, un jeton de session et vos favoris dans le localStorage de votre navigateur. Les messages du chat sont envoyés à Groq pour le traitement par IA. Aucun identifiant personnel n'est collecté.",
+      "thirdPartiesTitle": "Tiers",
+      "thirdPartiesBody": "Les messages du chat sont traités par Groq (États-Unis). Les annonces proviennent de sources publiques (automobile.tn, AutoScout24).",
+      "retentionTitle": "Durée de conservation",
+      "retentionBody": "Les données stockées dans le localStorage sont conservées jusqu'à ce que vous les effaciez via le lien en pied de page ou les paramètres de votre navigateur. Les sessions de chat expirent après 30 jours.",
+      "rightsTitle": "Vos droits (RGPD)",
+      "rightsBody": "Si vous résidez dans l'UE, vous pouvez demander l'accès, la rectification ou la suppression des données vous concernant. Contactez-nous via la page Mentions légales.",
+      "lastUpdated": "Dernière mise à jour : {{date}}"
+    },
+    "imprint": {
+      "title": "Mentions légales",
+      "lead": "Informations requises par la loi (§5 TMG).",
+      "operatorTitle": "Éditeur",
+      "operatorBody": "CarAdvisor\n[Nom du propriétaire]\n[Adresse]\n[Code postal, ville]\n[Pays]",
+      "contactTitle": "Contact",
+      "contactBody": "E-mail : [contact@example.com]",
+      "liabilityTitle": "Responsabilité du contenu",
+      "liabilityBody": "Nous nous efforçons de maintenir les informations à jour, mais nous ne garantissons ni l'exhaustivité ni la disponibilité des annonces provenant de tiers."
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "lead": "Utilisation de CarAdvisor.",
+      "useTitle": "Usage acceptable",
+      "useBody": "CarAdvisor est un outil gratuit et anonyme de recherche de véhicules. Vous acceptez de ne pas abuser du service ni de tenter d'extraire des données à grande échelle.",
+      "accuracyTitle": "Exactitude des annonces",
+      "accuracyBody": "Les données des véhicules sont agrégées à partir de sources publiques et peuvent être obsolètes. Vérifiez toujours les détails auprès du vendeur d'origine.",
+      "liabilityTitle": "Limitation de responsabilité",
+      "liabilityBody": "CarAdvisor est fourni « en l'état » sans garantie. Nous ne sommes pas partie aux transactions entre vous et un vendeur.",
+      "lastUpdated": "Dernière mise à jour : {{date}}"
+    }
   }
 }

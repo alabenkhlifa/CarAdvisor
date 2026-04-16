@@ -14,9 +14,12 @@ export default defineConfig({
     port: 5274,
     proxy: {
       '/api': {
-        target: 'http://api:3100',
+        target: process.env.VITE_API_PROXY_TARGET || 'http://api:3100',
         changeOrigin: true,
       },
     },
+  },
+  build: {
+    sourcemap: true,
   },
 });

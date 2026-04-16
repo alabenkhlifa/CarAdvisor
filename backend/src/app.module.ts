@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { LoggerModule } from 'nestjs-pino';
 import { getDatabaseConfig } from './config/database.config';
 import { envValidationSchema } from './config/env.validation';
 import { AppController } from './app.controller';
@@ -22,6 +23,16 @@ import { ChatModule } from './modules/chat/chat.module';
       validationSchema: envValidationSchema,
       validationOptions: {
         abortEarly: false,
+      },
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: process.env.LOG_LEVEL ?? (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
+        transport:
+          process.env.NODE_ENV !== 'production'
+            ? { target: 'pino-pretty', options: { singleLine: true, translateTime: 'HH:MM:ss' } }
+            : undefined,
+        redact: ['req.headers.authorization', 'req.headers.cookie'],
       },
     }),
     ThrottlerModule.forRoot([

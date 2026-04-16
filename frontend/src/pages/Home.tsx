@@ -6,7 +6,6 @@ import { usePreferences } from '../store/usePreferences';
 import type { BodyType } from '@shared/types';
 import RangeSlider from '../components/ui/RangeSlider';
 import Button from '../components/ui/Button';
-import Badge from '../components/ui/Badge';
 
 const bodyTypes: BodyType[] = ['sedan', 'suv', 'hatchback', 'minivan', 'coupe', 'wagon'];
 const fuelTypes = ['petrol', 'diesel', 'hybrid', 'electric'] as const;
@@ -79,7 +78,7 @@ export default function Home() {
       condition,
       bodyType: selectedBodyTypes.length === 1 ? selectedBodyTypes[0] : null,
       fuelType,
-      transmission: transmission === 'any' ? null : transmission,
+      transmission,
     });
     navigate('/recommendations');
   };

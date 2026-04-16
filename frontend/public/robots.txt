@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /privacy
+Disallow: /terms
+Disallow: /imprint
+
+Sitemap: /sitemap.xml

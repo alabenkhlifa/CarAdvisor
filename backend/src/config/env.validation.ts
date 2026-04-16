@@ -14,4 +14,11 @@ export const envValidationSchema = Joi.object({
   POSTGRES_DB: Joi.string().required(),
 
   GROQ_API_KEY: Joi.string().required(),
+
+  SENTRY_DSN: Joi.string().optional().allow(''),
+  SENTRY_TRACES_SAMPLE_RATE: Joi.number().min(0).max(1).optional(),
+  LOG_LEVEL: Joi.string()
+    .valid('fatal', 'error', 'warn', 'info', 'debug', 'trace')
+    .optional(),
+  DB_POOL_MAX: Joi.number().optional(),
 }).unknown(true);

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useLanguage } from '../../store/useLanguage';
+import { useLanguage, type Language } from '../../store/useLanguage';
 import { useMarket } from '../../store/useMarket';
 
 const marketFlags: Record<string, string> = {
@@ -29,7 +29,7 @@ export default function Header() {
           <select
             value={language}
             onChange={(e) => {
-              const next = e.target.value as 'en' | 'fr';
+              const next = e.target.value as Language;
               setLanguage(next);
               i18n.changeLanguage(next);
             }}
@@ -38,6 +38,7 @@ export default function Header() {
           >
             <option value="en">🇬🇧 EN</option>
             <option value="fr">🇫🇷 FR</option>
+            <option value="de">🇩🇪 DE</option>
           </select>
 
           {/* Market badge */}

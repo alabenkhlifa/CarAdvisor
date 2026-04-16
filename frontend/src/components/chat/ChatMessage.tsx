@@ -7,7 +7,7 @@ interface ChatMessageProps {
   content: string;
 }
 
-function renderMarkdown(text: string): string {
+export function renderMarkdown(text: string): string {
   let html = text
     // Escape HTML
     .replace(/&/g, '&amp;')
