@@ -14,7 +14,7 @@ import { Response } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ChatService } from './chat.service';
-import { GroqService, ExtractedIntent } from './groq.service';
+import { AiService, ExtractedIntent } from './ai.service';
 import { ChatRequestDto } from './dto/chat-request.dto';
 import { buildSystemPrompt } from './prompts/system-prompt';
 import { Market } from '../../entities/market.entity';
@@ -25,7 +25,7 @@ import { Vehicle } from '../../entities/vehicle.entity';
 export class ChatController {
   constructor(
     private readonly chatService: ChatService,
-    private readonly groqService: GroqService,
+    private readonly aiService: AiService,
     @InjectRepository(Market)
     private readonly marketRepo: Repository<Market>,
     @InjectRepository(Vehicle)
@@ -89,7 +89,7 @@ export class ChatController {
     }));
     const intentHistory = hasExplicitSelection ? [] : chatHistory;
 
-    const intent = await this.groqService.extractIntent(
+    const intent = await this.aiService.extractIntent(
       body.message,
       intentHistory,
     );
@@ -131,7 +131,7 @@ export class ChatController {
     );
 
     let fullResponse = '';
-    for await (const chunk of this.groqService.streamChat(
+    for await (const chunk of this.aiService.streamChat(
       chatHistory,
       systemPrompt,
     )) {

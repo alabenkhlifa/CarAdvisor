@@ -101,7 +101,7 @@ export default function ChatPanel({ currentResultIds, aiSelectedCars = [] }: Cha
                 <p className="text-xs text-warmgray font-body">
                   {hasSelection
                     ? `${aiSelectedCars.length} car${aiSelectedCars.length > 1 ? 's' : ''} selected`
-                    : 'Powered by Groq'}
+                    : 'Powered by OVHcloud AI'}
                 </p>
               </div>
             </div>

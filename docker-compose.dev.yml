@@ -32,7 +32,8 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - API_PORT=3100
       - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:5274}
-      - GROQ_API_KEY=${GROQ_API_KEY}
+      - OVH_AI_ENDPOINTS_API_KEY=${OVH_AI_ENDPOINTS_API_KEY}
+      - OVH_AI_ENDPOINTS_BASE_URL=${OVH_AI_ENDPOINTS_BASE_URL:-}
       - NODE_ENV=development
     volumes:
       - ./backend/src:/app/backend/src

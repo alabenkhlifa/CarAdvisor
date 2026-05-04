@@ -5,7 +5,7 @@ import { Vehicle } from '../../entities/vehicle.entity';
 import { Market } from '../../entities/market.entity';
 import { VehiclesModule } from '../vehicles/vehicles.module';
 import { ChatService } from './chat.service';
-import { GroqService } from './groq.service';
+import { AiService } from './ai.service';
 import { ChatController } from './chat.controller';
 
 @Module({
@@ -14,7 +14,7 @@ import { ChatController } from './chat.controller';
     VehiclesModule,
   ],
   controllers: [ChatController],
-  providers: [ChatService, GroqService],
+  providers: [ChatService, AiService],
   exports: [ChatService],
 })
 export class ChatModule {}

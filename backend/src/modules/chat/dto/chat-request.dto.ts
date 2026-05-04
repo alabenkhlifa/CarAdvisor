@@ -15,7 +15,7 @@ export class ChatRequestDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(['en', 'fr'])
+  @IsIn(['en', 'fr', 'de'])
   language?: string = 'en';
 
   @IsArray()

@@ -1,6 +1,6 @@
 # CarAdvisor
 
-Car recommendation website helping users in Tunisia and Germany find and compare cars (new + used). AI-powered chat via Groq. Anonymous users, no auth.
+Car recommendation website helping users in Tunisia and Germany find and compare cars (new + used). AI-powered chat via OVH AI Endpoints (Mistral models, EU-hosted). Anonymous users, no auth.
 
 ## Architecture
 
@@ -104,12 +104,14 @@ All in `backend/src/entities/`. Vehicle has eager ManyToOne to Model and Market.
 - `ImportCron` — weekly (Sunday 3AM): downloads CSVs from GitHub, then imports all markets
 - When adding `image_url` column to CSVs, the parser already reads it
 
-## AI Chat (Groq)
+## AI Chat (OVH AI Endpoints)
+
+OpenAI-compatible API at `https://oai.endpoints.kepler.ai.cloud.ovh.net/v1`. Uses the `openai` npm SDK with a custom `baseURL`. Auth via `OVH_AI_ENDPOINTS_API_KEY` (Bearer token). Models hosted in France (EU/GDPR friendly).
 
 ### Two-Step Pipeline Architecture
 The chat uses two separate LLM calls to minimize tokens and maximize accuracy:
 
-**Step 1: Intent Extraction** (`llama-3.1-8b-instant`, ~50 output tokens, ~0 cost)
+**Step 1: Intent Extraction** (`Mistral-7B-Instruct-v0.3`, ~50 output tokens, $0.11/1M tokens)
 - Extracts structured JSON from user message: `{brands, models, bodyType, fuelType, transmission, condition, minBudget, maxBudget, action}`
 - Reads last 4 messages for conversation context
 - Only includes brands/models the user explicitly named (never guesses)
@@ -120,15 +122,15 @@ The chat uses two separate LLM calls to minimize tokens and maximize accuracy:
 - Filters by price range, body type, fuel, transmission, condition
 - Returns only matching cars (max 15) in compact pipe-delimited format with vehicle IDs
 
-**Step 3: Response Generation** (`llama-3.3-70b-versatile`, max 512 tokens, streamed SSE)
+**Step 3: Response Generation** (`Mistral-Small-3.2-24B-Instruct-2506`, max 512 tokens, streamed SSE, $0.10/$0.31 per 1M)
 - Receives only the matching cars + system prompt
 - Generates concise response with markdown links: `[Car Name](/car/ID)` — clickable in the frontend
 - If message is vague, asks 2-3 clarifying questions instead of recommending
-- Fallback to `llama3-70b-8192` on 429 rate limit
+- Fallback to `Meta-Llama-3_3-70B-Instruct` on 429 rate limit
 
 ### Key Files
 - `backend/src/modules/chat/chat.controller.ts` — SSE streaming endpoint + `queryByIntent()` (precise DB query from structured intent)
-- `backend/src/modules/chat/groq.service.ts` — `extractIntent()` (fast model) + `streamChat()` (main model with fallback)
+- `backend/src/modules/chat/ai.service.ts` — `extractIntent()` (fast model) + `streamChat()` (main model with fallback)
 - `backend/src/modules/chat/prompts/system-prompt.ts` — system prompt with link format instructions
 - `frontend/src/hooks/useChat.ts` — client-side chat state + SSE stream reader
 - `frontend/src/components/chat/ChatPanel.tsx` — floating chat overlay (bottom sheet mobile, floating card desktop)
@@ -170,7 +172,7 @@ English + French. Files: `frontend/src/i18n/en.json` and `fr.json`. Always updat
 - **Shared types:** Import from `@shared/types` via path alias in both tsconfigs.
 - **Styling:** TailwindCSS utilities only. Use the custom theme colors/fonts. No CSS-in-JS.
 - **i18n:** All user-visible text through react-i18next. Never hardcode strings.
-- **AI:** Groq SDK — never use Anthropic/OpenAI SDKs for the chat feature.
+- **AI:** `openai` SDK pointed at OVH AI Endpoints (`baseURL: https://oai.endpoints.kepler.ai.cloud.ovh.net/v1`). Never use Anthropic/Groq SDKs for the chat feature.
 
 ## Hosting
 
@@ -181,4 +183,4 @@ Planned: cheapest OVH VPS, single Docker Compose (api + db + nginx). React build
 - Phase 7: Tests (Jest backend, Vitest frontend), GitHub Actions CI, production nginx config, error boundaries
 - Car images: `image_url` column ready in parser, needs to be added to the Python scraper CSVs
 - US market: deferred (no data source yet)
-- Groq chat: could benefit from caching repeated queries
+- AI chat: could benefit from caching repeated queries

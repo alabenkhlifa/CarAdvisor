@@ -38,3 +38,6 @@ npm-debug.log*
 
 # TypeORM
 ormconfig.json
+
+# E2E test evidence (local screenshots)
+.e2e-evidence/

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import Groq from 'groq-sdk';
+import OpenAI from 'openai';
 
 export interface ExtractedIntent {
   brands: string[];
@@ -14,28 +14,43 @@ export interface ExtractedIntent {
   action: 'recommend' | 'compare' | 'detail' | 'general';
 }
 
+const DEFAULT_BASE_URL = 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1';
+
+const ALLOWED_CONDITIONS = new Set(['new', 'used']);
+const ALLOWED_BODY_TYPES = new Set([
+  'sedan', 'suv', 'hatchback', 'minivan', 'coupe', 'convertible', 'wagon', 'pickup',
+]);
+const ALLOWED_FUEL_TYPES = new Set(['petrol', 'diesel', 'electric', 'hybrid']);
+const ALLOWED_TRANSMISSIONS = new Set(['manual', 'automatic']);
+
+function whitelist(value: unknown, allowed: Set<string>): string | null {
+  if (typeof value !== 'string') return null;
+  const v = value.toLowerCase().trim();
+  return allowed.has(v) ? v : null;
+}
+
 @Injectable()
-export class GroqService {
-  private readonly logger = new Logger(GroqService.name);
-  private readonly client: Groq | null;
-  private readonly mainModel = 'llama-3.3-70b-versatile';
-  private readonly fastModel = 'llama-3.1-8b-instant';
-  private readonly fallbackModel = 'llama3-70b-8192';
+export class AiService {
+  private readonly logger = new Logger(AiService.name);
+  private readonly client: OpenAI | null;
+  private readonly mainModel = 'Mistral-Small-3.2-24B-Instruct-2506';
+  private readonly fastModel = 'Mistral-7B-Instruct-v0.3';
+  private readonly fallbackModel = 'Meta-Llama-3_3-70B-Instruct';
 
   constructor(private readonly configService: ConfigService) {
-    const apiKey = this.configService.get<string>('GROQ_API_KEY');
+    const apiKey = this.configService.get<string>('OVH_AI_ENDPOINTS_API_KEY');
+    const baseURL =
+      this.configService.get<string>('OVH_AI_ENDPOINTS_BASE_URL') ||
+      DEFAULT_BASE_URL;
+
     if (apiKey) {
-      this.client = new Groq({ apiKey });
+      this.client = new OpenAI({ apiKey, baseURL });
     } else {
-      this.logger.warn('GROQ_API_KEY is not set.');
+      this.logger.warn('OVH_AI_ENDPOINTS_API_KEY is not set.');
       this.client = null;
     }
   }
 
-  /**
-   * Step 1: Extract structured search intent from user message.
-   * Uses a fast small model — cheap and instant.
-   */
   async extractIntent(
     userMessage: string,
     chatHistory: Array<{ role: string; content: string }>,
@@ -95,15 +110,17 @@ Rules:
       const parsed = JSON.parse(raw);
 
       return {
-        brands: parsed.brands || [],
-        models: parsed.models || [],
-        bodyType: parsed.bodyType || null,
-        fuelType: parsed.fuelType || null,
-        transmission: parsed.transmission || null,
-        condition: parsed.condition || null,
-        minBudget: parsed.minBudget || null,
-        maxBudget: parsed.maxBudget || null,
-        action: parsed.action || 'recommend',
+        brands: Array.isArray(parsed.brands) ? parsed.brands : [],
+        models: Array.isArray(parsed.models) ? parsed.models : [],
+        bodyType: whitelist(parsed.bodyType, ALLOWED_BODY_TYPES),
+        fuelType: whitelist(parsed.fuelType, ALLOWED_FUEL_TYPES),
+        transmission: whitelist(parsed.transmission, ALLOWED_TRANSMISSIONS),
+        condition: whitelist(parsed.condition, ALLOWED_CONDITIONS),
+        minBudget: typeof parsed.minBudget === 'number' ? parsed.minBudget : null,
+        maxBudget: typeof parsed.maxBudget === 'number' ? parsed.maxBudget : null,
+        action: ['recommend', 'compare', 'detail', 'general'].includes(parsed.action)
+          ? parsed.action
+          : 'recommend',
       };
     } catch (error: any) {
       this.logger.error(`Intent extraction failed: ${error?.message}`);
@@ -115,15 +132,12 @@ Rules:
     }
   }
 
-  /**
-   * Step 2: Stream the final response using the main model.
-   */
   async *streamChat(
     messages: Array<{ role: string; content: string }>,
     systemPrompt: string,
   ): AsyncIterable<string> {
     if (!this.client) {
-      yield 'AI chat is not configured. Please set GROQ_API_KEY.';
+      yield 'AI chat is not configured. Please set OVH_AI_ENDPOINTS_API_KEY.';
       return;
     }
 
@@ -154,7 +168,7 @@ Rules:
         yield* this.streamWithFallback(chatMessages);
         return;
       }
-      this.logger.error(`Groq API error: ${error?.message}`);
+      this.logger.error(`OVH AI Endpoints error: ${error?.message}`);
       yield 'Sorry, I encountered an error. Please try again.';
     }
   }

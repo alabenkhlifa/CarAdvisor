@@ -13,7 +13,8 @@ export const envValidationSchema = Joi.object({
   POSTGRES_PASSWORD: Joi.string().required(),
   POSTGRES_DB: Joi.string().required(),
 
-  GROQ_API_KEY: Joi.string().required(),
+  OVH_AI_ENDPOINTS_API_KEY: Joi.string().required(),
+  OVH_AI_ENDPOINTS_BASE_URL: Joi.string().uri().optional().allow(''),
 
   SENTRY_DSN: Joi.string().optional().allow(''),
   SENTRY_TRACES_SAMPLE_RATE: Joi.number().min(0).max(1).optional(),

@@ -1,15 +1,20 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { streamChat, parseSSELines, getChatHistory, type ChatMessage } from '../services/chat.api';
 import { useSession } from '../store/useSession';
 import { useMarket } from '../store/useMarket';
-import { useLanguage } from '../store/useLanguage';
+import type { Language } from '../store/useLanguage';
 
 export function useChat(currentResultIds?: number[], selectedVehicleIds?: number[]) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const { sessionToken, setSessionToken } = useSession();
   const { market } = useMarket();
-  const { language } = useLanguage();
+  const { i18n } = useTranslation();
+  const language: Language =
+    i18n.language === 'fr' || i18n.language === 'de' ? i18n.language : 'en';
+  const languageRef = useRef(language);
+  languageRef.current = language;
   const abortRef = useRef(false);
   const resultIdsRef = useRef(currentResultIds);
   resultIdsRef.current = currentResultIds;
@@ -42,7 +47,7 @@ export function useChat(currentResultIds?: number[], selectedVehicleIds?: number
       abortRef.current = false;
 
       try {
-        const reader = await streamChat(text.trim(), sessionToken, market, language, resultIdsRef.current, selectedIdsRef.current);
+        const reader = await streamChat(text.trim(), sessionToken, market, languageRef.current, resultIdsRef.current, selectedIdsRef.current);
         const decoder = new TextDecoder();
         let assistantContent = '';
         let hasStarted = false;
@@ -99,7 +104,7 @@ export function useChat(currentResultIds?: number[], selectedVehicleIds?: number
         setIsStreaming(false);
       }
     },
-    [isStreaming, sessionToken, market, language, setSessionToken],
+    [isStreaming, sessionToken, market, setSessionToken],
   );
 
   return { messages, isStreaming, sendMessage, loadHistory };
